@@ -1,0 +1,29 @@
+make clean
+make[1]: Entering directory '/mnt/data/github_projects/lightweight-process-support'
+rm -rf build
+make[1]: Leaving directory '/mnt/data/github_projects/lightweight-process-support'
+make test CFLAGS='-std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=undefined -fno-sanitize-recover=all' LDFLAGS='-fsanitize=undefined'
+make[1]: Entering directory '/mnt/data/github_projects/lightweight-process-support'
+mkdir -p build
+cc -Iinclude -Isrc -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=undefined -fno-sanitize-recover=all -c src/lwp.c -o build/lwp.o
+cc -Iinclude -Isrc -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=undefined -fno-sanitize-recover=all -c src/stack.c -o build/stack.o
+ar rcs build/liblwp.a build/lwp.o build/stack.o
+cc -Iinclude -Isrc -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=undefined -fno-sanitize-recover=all tests/test_lwp.c build/liblwp.a -fsanitize=undefined -o build/test_lwp
+./build/test_lwp
+PASS test_empty_scheduler
+PASS test_return_and_join
+PASS test_fifo_scheduling
+PASS test_explicit_exit
+PASS test_blocking_join
+PASS test_reentrancy_and_self_join
+PASS test_join_cycle_rejection
+PASS test_errno_preserved
+PASS test_spawn_from_thread
+PASS test_invalid_arguments
+PASS test_repeated_lifecycle
+PASS test_lower_guard_page
+PASS test_upper_guard_page
+PASS test_stack_rounding_and_release
+PASS test_single_joiner
+15 tests passed
+make[1]: Leaving directory '/mnt/data/github_projects/lightweight-process-support'

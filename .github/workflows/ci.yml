@@ -1,0 +1,15 @@
+name: C runtime tests
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        compiler: [gcc, clang]
+    steps:
+      - uses: actions/checkout@v4
+      - run: make test CC=${{ matrix.compiler }}
+      - run: make demo CC=${{ matrix.compiler }}
+      - run: make ubsan CC=${{ matrix.compiler }}

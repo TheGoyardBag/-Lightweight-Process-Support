@@ -1,0 +1,35 @@
+mkdir -p build
+cc -Iinclude -Isrc -std=c11 -O2 -g -Wall -Wextra -Wpedantic -Werror -c src/lwp.c -o build/lwp.o
+cc -Iinclude -Isrc -std=c11 -O2 -g -Wall -Wextra -Wpedantic -Werror -c src/stack.c -o build/stack.o
+ar rcs build/liblwp.a build/lwp.o build/stack.o
+cc -Iinclude -Isrc -std=c11 -O2 -g -Wall -Wextra -Wpedantic -Werror tests/test_lwp.c build/liblwp.a  -o build/test_lwp
+./build/test_lwp
+PASS test_empty_scheduler
+PASS test_return_and_join
+PASS test_fifo_scheduling
+PASS test_explicit_exit
+PASS test_blocking_join
+PASS test_reentrancy_and_self_join
+PASS test_join_cycle_rejection
+PASS test_errno_preserved
+PASS test_spawn_from_thread
+PASS test_invalid_arguments
+PASS test_repeated_lifecycle
+PASS test_lower_guard_page
+PASS test_upper_guard_page
+PASS test_stack_rounding_and_release
+PASS test_single_joiner
+15 tests passed
+cc -Iinclude -Isrc -std=c11 -O2 -g -Wall -Wextra -Wpedantic -Werror examples/round_robin.c build/liblwp.a  -o build/round_robin
+./build/round_robin
+thread 1 (alpha): turn 0
+thread 2 (beta): turn 0
+thread 1 (alpha): turn 1
+thread 2 (beta): turn 1
+thread 1 (alpha): turn 2
+thread 2 (beta): turn 2
+joined alpha: alpha
+cc -Iinclude -Isrc -std=c11 -O2 -g -Wall -Wextra -Wpedantic -Werror examples/benchmark.c build/liblwp.a  -o build/benchmark
+./build/benchmark
+threads=2 yields=200000 elapsed_seconds=0.077725 ns_per_yield=388.6
+Includes scheduler bookkeeping and two context transfers per yield; not a CPU-independent benchmark.
